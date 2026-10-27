@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#f9f6f0" />
+  <meta name="description" content="Um espaço privado para duas pessoas conversarem, discordarem com carinho e encontrarem pontos em comum." />
+  <title>Nossas visões de mundo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script defer src="config.js"></script>
+  <script defer src="app.js"></script>
+</head>
+<body>
+  <div class="decor decor-a" aria-hidden="true"></div>
+  <div class="decor decor-b" aria-hidden="true"></div>
+  <div id="toast" role="status" aria-live="polite"></div>
+  <div id="loading" class="loading-screen"><span class="spinner"></span><span>Preparando nosso cantinho...</span></div>
+
+  <section id="auth-view" class="auth-shell hidden" aria-labelledby="auth-heading">
+    <div class="auth-brand"><span class="logo-mark">✳</span><span>NOSSAS VISÕES DE MUNDO</span></div>
+    <div class="auth-card">
+      <div class="overline">UM ESPAÇO SÓ NOSSO</div>
+      <h1 id="auth-heading">Duas perspectivas.<br /><em>Uma conversa.</em></h1>
+      <p>Para entender, questionar e descobrir pontos em comum — no nosso tempo.</p>
+      <div class="auth-tabs" role="group" aria-label="Acesso">
+        <button class="tab active" data-auth-tab="login" type="button">Entrar</button>
+        <button class="tab" data-auth-tab="signup" type="button">Criar conta</button>
+      </div>
+      <form id="auth-form" class="form-stack">
+        <label for="auth-email">E-mail</label>
+        <input id="auth-email" type="email" autocomplete="email" required placeholder="voce@email.com" />
+        <label for="auth-password">Senha</label>
+        <input id="auth-password" type="password" autocomplete="current-password" minlength="6" required placeholder="Pelo menos 6 caracteres" />
+        <button id="auth-submit" class="btn btn-primary full" type="submit">Entrar no nosso espaço <span>→</span></button>
+      </form>
+      <p id="auth-help" class="fine-print">Cada pessoa entra com seu próprio e-mail e senha.</p>
+    </div>
+    <button id="demo-button" class="linklike demo-link" type="button">Quero conhecer uma demonstração primeiro →</button>
+  </section>
+
+  <section id="setup-view" class="auth-shell hidden" aria-labelledby="setup-heading">
+    <div class="auth-brand"><span class="logo-mark">✳</span><span>NOSSAS VISÕES DE MUNDO</span></div>
+    <div class="auth-card setup-card">
+      <div class="overline">QUASE LÁ</div>
+      <h1 id="setup-heading">Vamos criar nosso <em>espaço?</em></h1>
+      <p>Escreva como quer aparecer nas conversas e escolha criar uma sala ou entrar com o convite de quem já criou.</p>
+      <form id="setup-form" class="form-stack">
+        <label for="setup-name">Seu nome nos debates</label>
+        <input id="setup-name" required maxlength="36" placeholder="Ex.: Fer" />
+        <div class="choice-switch" role="group" aria-label="Escolha sua opção">
+          <button type="button" class="choice active" data-setup-mode="create">✦ Criar nossa sala</button>
+          <button type="button" class="choice" data-setup-mode="join">↗ Entrar com convite</button>
+        </div>
+        <div id="code-field" class="hidden">
+          <label for="invite-input">Código do convite</label>
+          <input id="invite-input" maxlength="64" placeholder="Cole o código enviado pela outra pessoa" autocapitalize="off" />
+        </div>
+        <button id="setup-submit" class="btn btn-primary full" type="submit">Criar nossa sala <span>→</span></button>
+      </form>
+      <button class="linklike" type="button" data-action="logout">Sair desta conta</button>
+    </div>
+  </section>
+
+  <div id="app-view" class="app-layout hidden">
+    <aside class="sidebar">
+      <div class="brand"><div class="logo-mark">✳</div><div class="brand-text">NOSSAS VISÕES<br /><span>DE MUNDO</span></div></div>
+      <nav class="nav-items" aria-label="Navegação principal">
+        <button class="nav-item active" type="button" data-nav="home"><span>⌂</span> Visão geral</button>
+        <button class="nav-item" type="button" data-nav="open"><span>◌</span> Debates abertos</button>
+        <button class="nav-item" type="button" data-nav="closed"><span>✓</span> Debates encerrados</button>
+        <button class="nav-item" type="button" data-nav="common"><span>♡</span> Pontos em comum</button>
+      </nav>
+      <div class="sidebar-quote"><span>“</span>Discordar não precisa significar se afastar.<div class="quote-rule"></div></div>
+      <div class="sidebar-bottom"><button class="profile-trigger" id="profile-trigger" type="button"><span id="self-side-avatar" class="avatar avatar-solo">E</span><span class="profile-text"><b id="self-side-name">Meu perfil</b><small>Editar perfil</small></span><span class="chevron">↗</span></button></div>
+    </aside>
+
+    <main class="content" id="main-content">
+      <header class="topbar"><div><div class="eyebrow" id="page-eyebrow">NOSSO ESPAÇO DE CONVERSAS</div><div class="breadcrumb" id="breadcrumb">Início <span> / </span> Visão geral</div></div><div class="top-actions"><button class="small-text-btn" id="refresh-btn" type="button" title="Buscar atualizações">↻ <span>Atualizar</span></button><button class="btn btn-dark" id="new-debate-button" type="button">＋ Novo debate</button></div></header>
+
+      <section id="dashboard-page" class="page">
+        <div class="hero"><div class="hero-copy"><div class="hero-pill">✷ NOSSO PONTO DE ENCONTRO</div><h1>Nossas visões<br /><em>de mundo.</em></h1><p>Um espaço para entender, questionar e descobrir pontos em comum. Um argumento de cada vez, sempre com respeito.</p><div class="hero-people" id="hero-people"></div></div><div class="hero-art" aria-hidden="true"><span class="orb orb-one"></span><span class="orb orb-two"></span><span class="orb-overlap">✳</span><span class="art-caption">duas perspectivas<br />& uma conexão</span></div></div>
+        <div class="section-heading"><div><span class="eyebrow">NOSSA JORNADA</span><h2>Onde estamos agora</h2></div><p>Toque em um bloco para explorar.</p></div>
+        <div class="stats-grid">
+          <button class="stat stat-open" data-nav="open" type="button"><span class="stat-icon">◌</span><strong id="count-open">0</strong><span class="stat-title">Debates em aberto</span><span class="stat-tail">Ver conversas <span>↗</span></span></button>
+          <button class="stat stat-closed" data-nav="closed" type="button"><span class="stat-icon">✓</span><strong id="count-closed">0</strong><span class="stat-title">Debates encerrados</span><span class="stat-tail">Revisitar ideias <span>↗</span></span></button>
+          <button class="stat stat-common" data-nav="common" type="button"><span class="stat-icon">♡</span><strong id="count-common">0</strong><span class="stat-title">Pontos em comum</span><span class="stat-tail">Nossas descobertas <span>↗</span></span></button>
+        </div>
+        <div class="section-heading discussions-heading"><div><span class="eyebrow">CONVERSAS</span><h2>Em discussão</h2></div><button class="linklike" type="button" data-nav="open">Ver todas →</button></div>
+        <div class="cards-grid" id="featured-debates"></div>
+        <div class="gentle-note"><span>✦</span><div><b>Uma lembrança gentil</b><p>Não precisamos concordar em tudo para nos escutarmos. Responder depois também é uma forma de cuidado.</p></div></div>
+      </section>
+
+      <section id="list-page" class="page hidden">
+        <div class="page-title"><span class="eyebrow" id="list-kicker">NOSSAS CONVERSAS</span><h1 id="list-title">Debates abertos</h1><p id="list-description">Um espaço para compartilhar ideias com calma.</p></div>
+        <div class="list-toolbar"><span id="list-count">0 debates</span><button class="btn btn-outline" type="button" id="list-create">＋ Criar debate</button></div>
+        <div class="cards-grid list-cards" id="list-debates"></div>
+      </section>
+
+      <section id="common-page" class="page hidden"><div class="page-title"><span class="eyebrow">PONTES QUE CONSTRUÍMOS</span><h1>O que temos <em>em comum.</em></h1><p>As coisas que descobrimos ou aprendemos a valorizar juntos, mesmo partindo de lugares diferentes.</p></div><div id="common-list" class="common-list"></div></section>
+
+      <section id="debate-page" class="page hidden"><button class="back-link" id="back-to-list" type="button">← Voltar às conversas</button><div id="debate-content"></div></section>
+    </main>
+  </div>
+
+  <div class="modal-backdrop hidden" id="modal-backdrop" role="presentation"><div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title"><div class="modal-heading"><div><span class="eyebrow">UMA NOVA CONVERSA</span><h2 id="modal-title">Propor um tema</h2></div><button class="x-button" type="button" data-action="close-modal" aria-label="Fechar">×</button></div><form id="new-debate-form" class="form-stack"><label for="debate-title">Sobre o que vamos conversar?</label><input id="debate-title" required minlength="5" maxlength="140" placeholder="Ex.: Como melhorar a segurança pública?" /><label for="debate-category">Categoria</label><select id="debate-category"><option>Sociedade</option><option>Economia</option><option>Educação</option><option>Segurança</option><option>Meio ambiente</option><option>Trabalho</option><option>Outros</option></select><label for="debate-description">Contexto ou pergunta inicial <span class="optional">(opcional)</span></label><textarea id="debate-description" rows="4" maxlength="1200" placeholder="Conte por que gostaria de conversar sobre isso..."></textarea><div class="modal-actions"><button type="button" class="btn btn-outline" data-action="close-modal">Cancelar</button><button class="btn btn-primary" type="submit">Criar debate →</button></div></form></div></div>
+
+  <div class="modal-backdrop hidden" id="profile-backdrop" role="presentation"><div class="modal compact" role="dialog" aria-modal="true" aria-labelledby="profile-title"><div class="modal-heading"><div><span class="eyebrow">SUA IDENTIDADE</span><h2 id="profile-title">Meu perfil</h2></div><button class="x-button" type="button" data-action="close-profile" aria-label="Fechar">×</button></div><form id="profile-form" class="form-stack"><label for="profile-name">Como quer ser chamada(o)?</label><input id="profile-name" maxlength="36" minlength="2" required/><label for="avatar-file">Foto de perfil <span class="optional">(opcional; até 3 MB)</span></label><input type="file" id="avatar-file" accept="image/png,image/jpeg,image/webp"/><p class="fine-print">A foto é guardada em um espaço privado. Só participantes da mesma sala podem acessá-la.</p><button class="btn btn-primary full" type="submit">Salvar perfil →</button></form><div class="profile-footer"><button class="linklike" type="button" id="copy-invite">Copiar convite para a outra pessoa</button><button class="linklike danger-text" type="button" data-action="logout">Sair da conta</button></div></div></div>
+</body>
+</html>
